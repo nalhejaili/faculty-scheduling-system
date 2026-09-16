@@ -42,6 +42,11 @@ Rebuild Solution
 
 The Release configuration treats compiler warnings as errors. The published source was successfully built in Release configuration on Windows before publication with 0 warnings and 0 errors.
 
+## First run
+The public portfolio build starts directly in **Free Demo** mode and does not require a license serial.
+
+If the local database does not contain any users, the application opens **Create First Administrator**. The reviewer chooses the administrator username and password during first-run setup; no fixed administrator password is embedded in the public source.
+
 ## Data and privacy
 This public source package contains synthetic sample data only. It does not include a production database, real faculty/student records, local Visual Studio user files, backup source files, or organization-specific branding.
 
@@ -50,8 +55,10 @@ The user interface and public source comments/documentation are English-only. Le
 
 ## Security notes
 - Passwords are stored using salted PBKDF2 hashes.
+- The public portfolio build runs in Free Demo mode and bypasses serial activation.
+- The public repository does not contain the private license generator or a production licensing secret.
+- Private/commercial deployments should keep licensing secrets and serial-generation tooling outside the client repository.
 - LAN synchronization currently uses HTTP and is intended only for trusted local networks. Do not expose the LAN service directly to the public Internet without adding TLS and appropriate network controls.
-- The public repository does not contain a production licensing secret. It falls back to a clearly marked demo value; private/commercial builds should provide `TRAINER_SCHEDULER_LICENSE_SECRET` through a secure deployment process and keep any serial-generation tooling outside the client repository.
 
 ## Repository hygiene
 The public package excludes Visual Studio user files, backups, build output, local databases, logs, publish output, and private license files through `.gitignore`.
