@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 using System.Text.Json;
@@ -10,70 +10,10 @@ namespace TrainerScheduler.Services
     {
         public static bool LoadAndValidate()
         {
-            try
-            {
-                if (!File.Exists(LicensePath))
-                {
-                    ResetToFree();
-                    return false;
-                }
-
-                string json = File.ReadAllText(LicensePath, Encoding.UTF8);
-                LicenseInfo info = JsonSerializer.Deserialize<LicenseInfo>(json) ?? new LicenseInfo();
-
-                if (string.IsNullOrWhiteSpace(info.Serial))
-                {
-                    ResetToFree();
-                    return false;
-                }
-
-                if (string.Equals(info.Serial, "FREE", StringComparison.OrdinalIgnoreCase))
-                {
-                    _license = new LicenseInfo
-                    {
-                        Serial = "FREE",
-                        MachineId = MachineId,
-                        ExpiryDate = null,
-                        Plan = "FREE"
-                    };
-
-                    HasSavedLicense = true;
-                    UpdateDisplayStrings();
-                    return true;
-                }
-
-                string error;
-                LicensePayload payload;
-                if (!TryDecodeSerial(info.Serial, out payload, out error))
-                {
-                    ResetToFree();
-                    return false;
-                }
-
-                string currentMachine = MachineId;
-                if (!string.Equals(payload.MachineId, currentMachine, StringComparison.OrdinalIgnoreCase))
-                {
-                    ResetToFree();
-                    return false;
-                }
-
-                _license = new LicenseInfo
-                {
-                    Serial = info.Serial,
-                    MachineId = payload.MachineId,
-                    ExpiryDate = payload.Expiry,
-                    Plan = payload.Plan
-                };
-
-                HasSavedLicense = true;
-                UpdateDisplayStrings();
-                return !IsExpired;
-            }
-            catch
-            {
-                ResetToFree();
-                return false;
-            }
+            // Public portfolio build: always run as the free demo edition.
+            ResetToFree();
+            HasSavedLicense = true;
+            return true;
         }
 
         public static bool TryActivate(string serial, out string message)
