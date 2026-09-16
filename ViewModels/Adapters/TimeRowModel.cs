@@ -1,0 +1,1 @@
+﻿using System.Collections.ObjectModel;namespace MiniTrainerScheduler.ViewModels.Adapters{public sealed class TimeRowModel{public string Time{get;set;}="";public ObservableCollection<string>[] Cells{get;}=new ObservableCollection<string>[5]{new(),new(),new(),new(),new()};}}

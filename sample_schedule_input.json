@@ -1,0 +1,107 @@
+{
+  "Departments": [
+    {
+      "Id": 1,
+      "Name": "Computer Science"
+    },
+    {
+      "Id": 2,
+      "Name": "Information Systems"
+    },
+    {
+      "Id": 3,
+      "Name": "Mechanical Engineering"
+    },
+    {
+      "Id": 4,
+      "Name": "Civil Engineering"
+    }
+  ],
+  "Faculties": [
+    {
+      "Id": 1,
+      "Name": "Faculty A",
+      "DepartmentId": 1,
+      "MaxHoursPerWeek": 16
+    },
+    {
+      "Id": 2,
+      "Name": "Faculty B",
+      "DepartmentId": 2,
+      "MaxHoursPerWeek": 14
+    },
+    {
+      "Id": 3,
+      "Name": "Faculty C",
+      "DepartmentId": 3,
+      "MaxHoursPerWeek": 16
+    },
+    {
+      "Id": 4,
+      "Name": "Faculty D",
+      "DepartmentId": 4,
+      "MaxHoursPerWeek": 14
+    },
+    {
+      "Id": 5,
+      "Name": "Faculty E",
+      "DepartmentId": 1,
+      "MaxHoursPerWeek": 12
+    }
+  ],
+  "Courses": [
+    {
+      "Id": 101,
+      "Name": "Programming Fundamentals",
+      "DepartmentId": 1,
+      "HoursPerWeek": 4,
+      "StudentCount": 30
+    },
+    {
+      "Id": 102,
+      "Name": "Data Structures",
+      "DepartmentId": 1,
+      "HoursPerWeek": 4,
+      "StudentCount": 28
+    },
+    {
+      "Id": 201,
+      "Name": "Database Systems",
+      "DepartmentId": 2,
+      "HoursPerWeek": 4,
+      "StudentCount": 32
+    },
+    {
+      "Id": 301,
+      "Name": "Engineering Mechanics",
+      "DepartmentId": 3,
+      "HoursPerWeek": 3,
+      "StudentCount": 26
+    },
+    {
+      "Id": 401,
+      "Name": "Structural Analysis",
+      "DepartmentId": 4,
+      "HoursPerWeek": 3,
+      "StudentCount": 24
+    }
+  ],
+  "Rooms": [
+    {
+      "Id": 1,
+      "Name": "Lecture Hall A"
+    },
+    {
+      "Id": 2,
+      "Name": "Lecture Hall B"
+    },
+    {
+      "Id": 3,
+      "Name": "Computer Lab 1"
+    },
+    {
+      "Id": 4,
+      "Name": "Engineering Lab"
+    }
+  ]
+}

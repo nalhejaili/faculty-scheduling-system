@@ -1,0 +1,250 @@
+﻿<Window x:Class="MiniTrainerScheduler.Views.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="About the Platform"
+        Height="520" Width="820"
+        FlowDirection="LeftToRight"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        WindowStyle="SingleBorderWindow"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True">
+
+    <Window.Resources>
+        
+        <SolidColorBrush x:Key="AccentBrush" Color="#1E467A"/>
+        
+        <Style TargetType="TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E5E7EB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="14"/>
+        </Style>
+    </Window.Resources>
+
+    <Border Padding="16" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Header -->
+                <RowDefinition Height="*"/>
+                <!-- Content -->
+                <RowDefinition Height="Auto"/>
+                <!-- Footer -->
+            </Grid.RowDefinitions>
+
+            <!-- ===== Header ===== -->
+            <Border Grid.Row="0"
+                    Background="White"
+                    Padding="10"
+                    CornerRadius="8"
+                    BorderBrush="{StaticResource AccentBrush}"
+                    BorderThickness="1"
+                    Margin="0,0,0,12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock Text="University Academic Timetable Suite" FontSize="22" FontWeight="Bold"/>
+                        <TextBlock FontSize="13" Opacity="0.85"
+                                   Text="{Binding AppVersion, Mode=OneWay, TargetNullValue=—, StringFormat=Version: {0}}"/>
+                    </StackPanel>
+
+                    
+                    <Image x:Name="AppLogo"
+                           Grid.Column="1"
+                           Width="120" Height="120"
+                           Stretch="Uniform"
+                           RenderOptions.BitmapScalingMode="HighQuality"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Margin="12,0,0,0"/>
+                </Grid>
+            </Border>
+
+            <!-- ===== Content ===== -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                
+                <Border Grid.Column="0" Style="{StaticResource Card}" Margin="0,0,12,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Text="License Information" FontSize="18" FontWeight="Bold" Margin="0,0,0,8"/>
+
+                        <Border Grid.Row="1" Background="#FAFAFA" CornerRadius="6"
+                                BorderBrush="#E5E7EB" BorderThickness="1" Padding="10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                
+                                <StackPanel Grid.Column="0">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="8"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="Activation Status:"/>
+                                        <TextBlock Grid.Column="2"
+                                                   FontWeight="Bold"
+                                                   Foreground="{StaticResource AccentBrush}"
+                                                   Text="{Binding LicenseActivation, Mode=OneWay, TargetNullValue=—}"/>
+                                    </Grid>
+
+                                    <Grid Margin="0,4,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="8"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="Serial:"/>
+                                        <TextBlock Grid.Column="2"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   Text="{Binding LicenseSerial, Mode=OneWay, TargetNullValue=—}"/>
+                                    </Grid>
+
+                                    <Grid Margin="0,4,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="8"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="Plan:"/>
+                                        <TextBlock Grid.Column="2"
+                                                   Text="{Binding LicensePlan, Mode=OneWay, TargetNullValue=—}"/>
+                                    </Grid>
+                                </StackPanel>
+
+                                
+                                <StackPanel Grid.Column="1">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="8"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="Expires On:"/>
+                                        <TextBlock Grid.Column="2"
+                                                   FontWeight="Bold"
+                                                   Text="{Binding LicenseExpiry, Mode=OneWay, TargetNullValue=—}"/>
+                                    </Grid>
+
+                                    <Grid Margin="0,4,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="8"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="Days Remaining:"/>
+                                        <TextBlock Grid.Column="2"
+                                                   FontWeight="Bold"
+                                                   Text="{Binding LicenseDaysLeft, Mode=OneWay, TargetNullValue=—}"/>
+                                    </Grid>
+
+                                    <Button Content="Enter / Renew License"
+                                            Height="30" Width="150"
+                                            Margin="0,6,0,0"
+                                            Click="Renew_Click"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                
+                <Border Grid.Column="1" Style="{StaticResource Card}">
+                    <StackPanel>
+                        <TextBlock Text="Lead Developer" FontSize="18" FontWeight="Bold" Margin="0,0,0,8"/>
+
+                        
+                        <TextBlock FontSize="13"
+                                   Text="{Binding DeveloperName, Mode=OneWay, TargetNullValue=—}"/>
+
+                        
+                        <Grid Margin="0,4,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" FontSize="13" Text="Specialization:"/>
+                            <TextBlock Grid.Column="2" FontSize="13"
+                                       Text="{Binding DeveloperSpeciality, Mode=OneWay, TargetNullValue=—}"/>
+                        </Grid>
+
+                        
+                        <Grid Margin="0,4,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" FontSize="13" Text="Email:"/>
+                            <TextBlock Grid.Column="2" FontSize="13"
+                                       Text="{Binding DeveloperEmail, Mode=OneWay, TargetNullValue=—}"/>
+                        </Grid>
+
+                        
+                        <Grid Margin="0,4,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" FontSize="13" Text="Organization:"/>
+                            <TextBlock Grid.Column="2" FontSize="13"
+                                       TextTrimming="None"
+                                       Text="{Binding DeveloperOrganization, Mode=OneWay, TargetNullValue=—}"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- ===== Footer ===== -->
+            <Border Grid.Row="2" BorderBrush="#E5E7EB" BorderThickness="0,1,0,0" Padding="8,10,8,0" Margin="0,12,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               Opacity="0.82"
+                               FontSize="12"
+                               Text="{Binding DeveloperName, Mode=OneWay, TargetNullValue=—, StringFormat='This platform was developed by {0}, with AI-assisted support for design, testing, and usability refinement.'}"/>
+
+                    <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Right">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Width="120" Height="32" Click="OpenLicenseFolder_Click" Content="Open License Folder"/>
+                            <Button Width="100" Height="32" Margin="8,0,0,0" IsDefault="True" Click="Close_Click" Content="Close"/>
+                        </StackPanel>
+                        <TextBlock Margin="6,6,0,0"
+                                   HorizontalAlignment="Right"
+                                   FontSize="12"
+                                   Text="{Binding Copyright, Mode=OneWay, TargetNullValue=©}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

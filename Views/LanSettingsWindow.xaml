@@ -1,0 +1,104 @@
+﻿<Window x:Class="MiniTrainerScheduler.Views.LanSettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Network and Synchronization Settings"
+        Height="520"
+        Width="760"
+        WindowStartupLocation="CenterOwner"
+        FlowDirection="LeftToRight"
+        Background="#F8F9FB">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"
+                Margin="0,0,0,12"
+                Padding="18"
+                CornerRadius="8"
+                Background="{DynamicResource AppTopBarBrush}"
+                BorderBrush="{DynamicResource AppTopBarBorderBrush}"
+                BorderThickness="1">
+            <TextBlock Text="Network and Synchronization Settings"
+                       Foreground="White"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       TextAlignment="Center"/>
+        </Border>
+
+        <Border Grid.Row="1" Background="White" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="8" Padding="14">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+
+                    <!-- Mode -->
+                    <TextBlock Text="Operating Mode" FontWeight="SemiBold"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,6,0,12">
+                        <RadioButton x:Name="LocalOnlyRadio" Content="Standalone Mode (Local Database)" Margin="0,0,16,0"/>
+                        <RadioButton x:Name="ServerRadio" Content="Central Server (administration device)" Margin="0,0,16,0"/>
+                        <RadioButton x:Name="ClientRadio" Content="Client Terminal (department workstation)"/>
+                    </StackPanel>
+
+                    <!-- Server settings -->
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="120"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Text="Server Address" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <TextBox Grid.Column="1" x:Name="ServerHostText" Height="30" Margin="0,0,12,0"/>
+
+                        <TextBlock Grid.Column="2" Text="Port" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <TextBox Grid.Column="3" x:Name="PortText" Height="30"/>
+                    </Grid>
+
+		            <CheckBox x:Name="AutoStartCheck" Content="Start the server automatically when the administrator signs in" Margin="0,0,0,8"/>
+
+		            <TextBlock Text="Automatic refresh is controlled from the main window (button: Start/Stop Auto Refresh)."
+		                       Foreground="#6B7280" TextWrapping="Wrap" Margin="0,0,0,12"/>
+
+                    <!-- Local IPs -->
+                    <TextBlock Text="This Device Network Addresses" FontWeight="SemiBold"/>
+                    <TextBlock x:Name="LocalIpsText" Foreground="#374151" Margin="0,6,0,12" TextWrapping="Wrap"/>
+
+                    <!-- Status -->
+                    <TextBlock Text="Service Status" FontWeight="SemiBold"/>
+                    <TextBlock x:Name="ServerStatusText" Foreground="#374151" Margin="0,6,0,12" TextWrapping="Wrap"/>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                        <Button x:Name="StartServerButton" Content="Start Server" Padding="14,8" Margin="0,0,10,0" Click="StartServer_Click"/>
+                        <Button x:Name="StopServerButton" Content="Stop Server" Padding="14,8" Margin="0,0,10,0" Click="StopServer_Click"/>
+                        <Button x:Name="TestConnectionButton" Content="Test Connection" Padding="14,8" Click="TestConnection_Click"/>
+                    
+</StackPanel>
+
+                <TextBlock Text="Network Log (Last 80 Lines)" FontWeight="SemiBold" Margin="0,14,0,0"/>
+                <DockPanel Margin="0,6,0,0">
+                    <Button Content="Refresh" Padding="12,6" DockPanel.Dock="Left" Margin="0,0,10,0" Click="RefreshLog_Click"/>
+                    <Button Content="Open Log File" Padding="12,6" DockPanel.Dock="Left" Click="OpenLog_Click"/>
+                </DockPanel>
+                <TextBox x:Name="LanLogPreviewText"
+                         Margin="0,6,0,0"
+                         Height="140"
+                         VerticalScrollBarVisibility="Auto"
+                         HorizontalScrollBarVisibility="Auto"
+                         IsReadOnly="True"
+                         TextWrapping="NoWrap"
+                         FontFamily="Consolas"/>
+
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,12,0,0">
+            <Button Content="Open Network Log" Padding="18,10" Margin="0,0,10,0" Click="OpenLog_Click"/>
+            <Button Content="Save" Padding="18,10" Margin="0,0,10,0" Click="Save_Click"/>
+            <Button Content="Close" Padding="18,10" Click="Close_Click"/>
+        </StackPanel>
+
+    </Grid>
+</Window>

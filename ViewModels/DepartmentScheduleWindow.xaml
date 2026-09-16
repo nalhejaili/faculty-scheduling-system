@@ -1,0 +1,93 @@
+﻿<Window x:Class="MiniTrainerScheduler.Views.DepartmentScheduleWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:v="clr-namespace:MiniTrainerScheduler.Views.Controls"
+        Title="Department Timetable"
+        Height="650"
+        Width="1000"
+        FlowDirection="LeftToRight"
+        WindowStartupLocation="CenterOwner">
+
+    <DockPanel Margin="10">
+
+        
+        <StackPanel Orientation="Horizontal"
+                    DockPanel.Dock="Top"
+                    Margin="0,0,0,10">
+
+            <ComboBox Width="260"
+                      ItemsSource="{Binding Departments}"
+                      DisplayMemberPath="Name"
+                      SelectedItem="{Binding SelectedDepartment}" />
+
+            <ComboBox Width="120"
+                      Margin="10,0,0,0"
+                      ItemsSource="{Binding Levels}"
+                          SelectedValuePath="."
+                          SelectedValue="{Binding SelectedLevel}" />
+
+            <TextBlock Margin="20,0,0,0"
+                       FontSize="16"
+                       FontWeight="Bold"
+                       Text="{Binding DepartmentTotalHours, StringFormat=Total Hours: {0} hrs}" />
+
+            <Button Content="Print"
+                    Margin="10,0,0,0"
+                    Click="PrintBtn_Click"/>
+        </StackPanel>
+
+        
+        <TabControl x:Name="Tabs">
+
+            
+            <TabItem x:Name="ListTab"
+                     Header="Allocated Sessions">
+                <DataGrid x:Name="RowsGrid"
+                          ItemsSource="{Binding Rows}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          IsReadOnly="True"
+                          HeadersVisibility="Column">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Course"
+                                            Binding="{Binding Course}" />
+                        <DataGridTextColumn Header="Section"
+                                            Binding="{Binding Section}"
+                                            Width="60"/>
+                        <DataGridTextColumn Header="Time Slot"
+                                            Binding="{Binding Slot}"
+                                            Width="160"/>
+                        <DataGridTextColumn Header="Weekly Hours"
+                                            Binding="{Binding Hours}"
+                                            Width="80"/>
+                        <DataGridTextColumn Header="Faculty Member"
+                                            Binding="{Binding Faculty}" />
+                        <DataGridTextColumn Header="Room"
+                                            Binding="{Binding Room}"
+                                            Width="90"/>
+                        <DataGridTextColumn Header="Status"
+                                            Binding="{Binding Status}"
+                                            Width="90"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+            
+            <TabItem Header="Weekly Timetable">
+                
+                
+                <Border x:Name="TemplateRoot"
+        BorderBrush="Transparent"
+        BorderThickness="0"
+        Padding="8"
+        Margin="0,5,0,0">
+                    
+                    <v:GeneralScheduleGrid DataContext="{Binding GeneralProxy}"/>
+                </Border>
+
+            </TabItem>
+
+        </TabControl>
+
+    </DockPanel>
+</Window>

@@ -1,0 +1,235 @@
+﻿<Application x:Class="TrainerScheduler.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Startup="App_Startup"
+             Exit="App_Exit">
+
+    <!--
+        Global theme resources.
+        IMPORTANT (WPF): Menu dropdowns are hosted inside a Popup (separate visual tree),
+        so Window.Resources won't affect their default brushes. Therefore we override
+        the SystemColors menu brushes here at the Application level.
+    -->
+    <Application.Resources>
+
+        <!-- Brand / top bar palette (matches the old blue frame) -->
+        <SolidColorBrush x:Key="AppTopBarBrush" Color="#0E2A47"/>
+        <SolidColorBrush x:Key="AppTopBarHoverBrush" Color="#1B446A"/>
+        <SolidColorBrush x:Key="AppTopBarBorderBrush" Color="#0B2237"/>
+        <SolidColorBrush x:Key="AppTopBarSeparatorBrush" Color="#335A79"/>
+
+        <!-- Menu dropdown colors (File / View / Admin / Settings / Help) -->
+        <SolidColorBrush x:Key="{x:Static SystemColors.MenuBrushKey}" Color="#0E2A47"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.MenuTextBrushKey}" Color="#FFFFFF"/>
+
+        <!-- Hover / selection inside menus -->
+        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#1B446A"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#FFFFFF"/>
+
+        <!-- Disabled menu items -->
+        <SolidColorBrush x:Key="{x:Static SystemColors.GrayTextBrushKey}" Color="#B7C7D6"/>
+
+        <!-- Menu borders / separators (used by default templates) -->
+        <SolidColorBrush x:Key="{x:Static SystemColors.ActiveBorderBrushKey}" Color="#173A59"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.ControlDarkBrushKey}" Color="#244E70"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.ControlLightBrushKey}" Color="#335A79"/>
+
+        <!-- Optional: Context menus consistent with the top bar (safe with existing UI) -->
+        <Style TargetType="ContextMenu">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.MenuBrushKey}}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- ===== Force ALL Menu dropdowns to be the same blue (Popup lives outside Window tree) ===== -->
+        <SolidColorBrush x:Key="MenuPopupBackgroundBrush" Color="#0E2A47"/>
+        <SolidColorBrush x:Key="MenuPopupHoverBrush" Color="#1B446A"/>
+        <SolidColorBrush x:Key="MenuPopupBorderBrush" Color="#173A59"/>
+
+        <!-- Implicit Menu style (applies everywhere) -->
+        <Style TargetType="Menu">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+
+        <!-- Implicit MenuItem style + template to ensure submenu Popup background is BLUE, not white -->
+        <Style TargetType="MenuItem">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="MenuItem">
+                        <Border x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Header -->
+                                <ContentPresenter Grid.Column="1"
+                                                  ContentSource="Header"
+                                                  RecognizesAccessKey="True"
+                                                  VerticalAlignment="Center"/>
+
+                                <!-- Submenu Popup -->
+                                <Popup x:Name="PART_Popup"
+                                       Placement="Bottom"
+                                       IsOpen="{TemplateBinding IsSubmenuOpen}"
+                                       AllowsTransparency="True"
+                                       Focusable="False"
+                                       PopupAnimation="Fade">
+                                    <Border Background="{StaticResource MenuPopupBackgroundBrush}"
+                                            BorderBrush="{StaticResource MenuPopupBorderBrush}"
+                                            BorderThickness="1"
+                                            SnapsToDevicePixels="True">
+                                        <StackPanel IsItemsHost="True"
+                                                    KeyboardNavigation.DirectionalNavigation="Cycle"/>
+                                    </Border>
+                                </Popup>
+                            </Grid>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <!-- Top level header (File/View/...) sits on the top bar -->
+                            <Trigger Property="Role" Value="TopLevelHeader">
+                                <Setter TargetName="Bd" Property="Background" Value="Transparent"/>
+                            </Trigger>
+
+                            <!-- Submenu items default background should be blue -->
+                            <Trigger Property="Role" Value="SubmenuItem">
+                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource MenuPopupBackgroundBrush}"/>
+                            </Trigger>
+                            <Trigger Property="Role" Value="SubmenuHeader">
+                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource MenuPopupBackgroundBrush}"/>
+                            </Trigger>
+
+                            <!-- Hover / highlight -->
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource MenuPopupHoverBrush}"/>
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
+                            </Trigger>
+
+                            <!-- When top-level header is open: keep it blue (no pale outline) -->
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Role" Value="TopLevelHeader"/>
+                                    <Condition Property="IsSubmenuOpen" Value="True"/>
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource MenuPopupHoverBrush}"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Menu separators inside blue dropdown -->
+        <Style TargetType="Separator">
+            <Setter Property="Margin" Value="8,6"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Separator">
+                        <Border Height="1" Background="#335A79"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- CheckBox: fixed ✓ (not chevron) and consistent under RTL -->
+        <Style x:Key="AppCheckBoxStyle" TargetType="{x:Type CheckBox}">
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type CheckBox}">
+                        <DockPanel LastChildFill="True">
+                            <!-- Box on the RIGHT in RTL layouts -->
+                            <Border x:Name="Box"
+                                    Width="18" Height="18"
+                                    Margin="6,0,0,0"
+                                    BorderBrush="#B0B0B0"
+                                    BorderThickness="1"
+                                    Background="White"
+                                    CornerRadius="2"
+                                    DockPanel.Dock="Right"
+                                    SnapsToDevicePixels="True">
+                                <!-- Force LTR inside the glyph so RTL mirroring never flips it -->
+                                <Grid FlowDirection="LeftToRight">
+                                    <Path x:Name="CheckMark"
+                                          Data="M 2 9 L 6.5 13.5 L 16 3"
+                                          Stroke="#0E2A47"
+                                          StrokeThickness="2.6"
+                                          StrokeStartLineCap="Round"
+                                          StrokeEndLineCap="Round"
+                                          StrokeLineJoin="Round"
+                                          Visibility="Collapsed"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                                    <Rectangle x:Name="IndeterminateMark"
+                                               Width="10" Height="2"
+                                               Fill="#0E2A47"
+                                               Visibility="Collapsed"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+
+                            <ContentPresenter x:Name="ContentSite"
+                                              Margin="0,0,6,0"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True"
+                                              Content="{TemplateBinding Content}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              ContentStringFormat="{TemplateBinding ContentStringFormat}"/>
+                        </DockPanel>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="IndeterminateMark" Property="Visibility" Value="Collapsed"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="{x:Null}">
+                                <Setter TargetName="IndeterminateMark" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Box" Property="Opacity" Value="0.55"/>
+                                <Setter TargetName="ContentSite" Property="Opacity" Value="0.55"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Make it the default everywhere -->
+        <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource AppCheckBoxStyle}"/>
+
+        <!-- Note: DataGridCheckBoxColumn uses its own styles.
+             We apply our checkbox style to DataGrid checkboxes in code (App.xaml.cs)
+             to avoid brittle x:Static resource keys that can break startup. -->
+
+        <!-- Explicit style for DataGridCheckBoxColumn (some grids null-out implicit styles) -->
+        <Style x:Key="AppDataGridCheckBoxStyle"
+               TargetType="{x:Type CheckBox}"
+               BasedOn="{StaticResource AppCheckBoxStyle}">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0"/>
+        </Style>
+
+    </Application.Resources>
+</Application>

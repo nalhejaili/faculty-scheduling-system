@@ -1,0 +1,1228 @@
+﻿<Window x:Class="MiniTrainerScheduler.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:local="clr-namespace:MiniTrainerScheduler"
+        xmlns:views="clr-namespace:MiniTrainerScheduler.Views.Controls"
+
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:MiniTrainerScheduler.ViewModels"
+        Title="University Academic Timetable Suite"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        Background="#F8F9FB"
+        FlowDirection="LeftToRight"
+        Icon="/Assets/Icons/app.ico"
+>
+
+    <!-- DataContext -->
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+
+    
+    <Window.InputBindings>
+        <KeyBinding Key="F5" Command="{Binding GenerateCommand}"/>
+        <KeyBinding Modifiers="Control" Key="E" Command="{Binding ExportCsvCommand}"/>
+    </Window.InputBindings>
+
+    
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+
+        <!-- ===== Theme brushes (Top bar + menus) ===== -->
+        <SolidColorBrush x:Key="TopBarBrush" Color="#0E2A47"/>
+        <SolidColorBrush x:Key="TopBarBorderBrush" Color="#0B2237"/>
+        <SolidColorBrush x:Key="TopBarHoverBrush" Color="#1B446A"/>
+        <SolidColorBrush x:Key="TopBarTextBrush" Color="#FFFFFF"/>
+
+        
+        <SolidColorBrush x:Key="{x:Static SystemColors.MenuBrushKey}" Color="#0E2A47"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.MenuTextBrushKey}" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#1B446A"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.ControlDarkBrushKey}" Color="#244E70"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.ControlLightBrushKey}" Color="#335A79"/>
+
+        <Style TargetType="Separator">
+            <Setter Property="Margin" Value="8,6"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Separator">
+                        <Border Height="1" Background="#335A79"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+<Style x:Key="TopBarButton" TargetType="Button">
+    <Setter Property="Margin" Value="6,4,0,0"/>
+    <Setter Property="Padding" Value="14,8"/>
+    <Setter Property="FontSize" Value="13"/>
+    <Setter Property="MinWidth" Value="160"/>
+    <Setter Property="Foreground" Value="White"/>
+    <Setter Property="Background" Value="#1B446A"/>
+    <Setter Property="BorderBrush" Value="#173A59"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="Cursor" Value="Hand"/>
+</Style>
+
+        <!-- ===== Top Menu + Toolbar (Classic) ===== -->
+        <Style x:Key="TopMenu" TargetType="Menu">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Foreground" Value="{StaticResource TopBarTextBrush}"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Padding" Value="0"/>
+</Style>
+
+<Style x:Key="TopMenuItem" TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+    <Setter Property="Foreground" Value="{StaticResource TopBarTextBrush}"/>
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Padding" Value="10,6"/>
+    <Setter Property="FontSize" Value="13"/>
+
+    <Style.Triggers>
+        
+        <MultiTrigger>
+            <MultiTrigger.Conditions>
+                <Condition Property="Role" Value="TopLevelHeader"/>
+                <Condition Property="IsHighlighted" Value="True"/>
+            </MultiTrigger.Conditions>
+            <Setter Property="Background" Value="{StaticResource TopBarHoverBrush}"/>
+        </MultiTrigger>
+
+        
+        <MultiTrigger>
+            <MultiTrigger.Conditions>
+                <Condition Property="Role" Value="TopLevelHeader"/>
+                <Condition Property="IsSubmenuOpen" Value="True"/>
+            </MultiTrigger.Conditions>
+            <Setter Property="Background" Value="{StaticResource TopBarHoverBrush}"/>
+        </MultiTrigger>
+    </Style.Triggers>
+</Style>
+<Style x:Key="ToolButton" TargetType="Button">
+            <Setter Property="Margin" Value="4,2"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="MinWidth" Value="150"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#1B446A"/>
+            <Setter Property="BorderBrush" Value="#173A59"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="SolidButton" TargetType="Button">
+            <Setter Property="Margin" Value="0,6,0,0"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+
+        <Style x:Key="SectionHeader" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+        </Style>
+
+        <Style x:Key="PanelBorder" TargetType="Border">
+            <Setter Property="BorderBrush" Value="#E5E7EB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+    </Window.Resources>
+
+    <DockPanel>
+        <Border DockPanel.Dock="Bottom"
+Background="#F3F6FA"
+BorderBrush="#E2E8F0"
+BorderThickness="1,1,0,0"
+Padding="8,4" Margin="0,6,0,0">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                <TextBlock Text="University Academic Timetable Suite — Higher Education Edition"
+         FontSize="12"
+         Foreground="#55677A"
+         TextAlignment="Center"
+         HorizontalAlignment="Center"/>
+
+                
+                <TextBlock Text="{Binding LanStatusText}"
+         FontSize="11"
+         Foreground="#6B7280"
+         Margin="0,2,0,0"
+         TextAlignment="Center"
+         HorizontalAlignment="Center"/>
+            
+                <TextBlock Text="{Binding StudentsStatusText}"
+         FontSize="11"
+         Foreground="#6B7280"
+         Margin="0,1,0,0"
+         TextAlignment="Center"
+         HorizontalAlignment="Center"/></StackPanel>
+        </Border>
+
+
+        
+<Border DockPanel.Dock="Top"
+        Background="{StaticResource TopBarBrush}"
+        Padding="10"
+        BorderBrush="{StaticResource TopBarBorderBrush}"
+        BorderThickness="0,0,0,1">
+    <DockPanel LastChildFill="True">
+
+        <!-- Menu Bar -->
+        <Menu DockPanel.Dock="Top" Style="{StaticResource TopMenu}" ItemContainerStyle="{StaticResource TopMenuItem}">
+            
+            <MenuItem Header="File">
+                <MenuItem Header="Import JSON" Command="{Binding ImportJsonCommand}"
+                          Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+                
+                <MenuItem Header="Import Students (JSON)" Command="{Binding ImportStudentsJsonCommand}"
+                          Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+                <MenuItem Header="Import Student Plans (JSON)" Command="{Binding ImportStudentPlansJsonCommand}"
+                          Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+
+                
+                <MenuItem Header="Validate Expected Enrollment Report (CSV)" Command="{Binding ValidateExpectedRegistrationCsvCommand}"
+                          Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+
+                
+                <MenuItem Header="Import Expected Enrollment Report (CSV)" Command="{Binding ImportExpectedRegistrationCsvCommand}"
+                          Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+
+                <MenuItem Header="Distribute Students into Sections" Command="{Binding DistributeStudentsCommand}"
+                          Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+                <MenuItem Header="Export Students and Plans (JSON)" Command="{Binding ExportStudentsJsonCommand}"
+                          Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+                <MenuItem Header="Export Student Enrollments (JSON)" Command="{Binding ExportStudentEnrollmentsJsonCommand}"
+                          Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+                <Separator/>
+                <MenuItem Header="Save Selected Plan (JSON)" Command="{Binding SaveQueuedPlanJsonCommand}"/>
+                <MenuItem Header="Load Selected Plan (JSON)" Command="{Binding LoadQueuedPlanJsonCommand}"/>
+                            <MenuItem Header="Save Results" Click="SaveScheduledResults_Click"/>
+            <Separator/>
+<MenuItem Header="Export CSV" Command="{Binding ExportCsvCommand}"/>
+                <Separator/>
+                <MenuItem Header="Print University Master Timetable" Click="PrintMenu_Click"/>
+                <Separator/>
+                <MenuItem Header="Sign Out" Click="Logout_Click"
+                          Visibility="{Binding IsAdminOrSupervisor, Converter={StaticResource BoolToVis}}"/>
+                <MenuItem Header="Exit" Click="Exit_Click"/>
+            </MenuItem>
+
+            
+            <MenuItem Header="View">
+                <MenuItem Header="Generated Timetable Results" Click="OpenResultsPanel_Click"/>
+                <MenuItem Header="Department Timetable" Click="OpenDeptSchedule_Click"
+                          Visibility="{Binding IsAdminOrSupervisor, Converter={StaticResource BoolToVis}}"/>
+                <MenuItem Header="Faculty Timetable" Click="OpenFacultySchedule_Click"
+                          Visibility="{Binding IsAdminOrSupervisor, Converter={StaticResource BoolToVis}}"/>
+                                        <MenuItem Header="Student Timetable" Click="OpenStudentSchedule_Click" Visibility="{Binding IsAdminOrSupervisor, Converter={StaticResource BoolToVis}}"/>
+<MenuItem Header="Faculty Workload Totals" Click="OpenFacultyTotals_Click"
+                          Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+            </MenuItem>
+
+            
+            <MenuItem Header="Administration">
+                <MenuItem Header="Data Administration" Click="OpenDataAdmin_Click"
+                          Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+                <MenuItem Header="Users" Click="OpenUserAdmin_Click"
+                          Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+            </MenuItem>
+
+            
+            <MenuItem Header="Settings">
+                <MenuItem Header="Network Settings" Click="OpenLanSettings_Click"
+                          Visibility="{Binding IsAdminOrSupervisor, Converter={StaticResource BoolToVis}}"/>
+                                        <MenuItem Header="Refresh from Server" Click="RefreshFromServer_Click"
+                                  Visibility="{Binding IsAdminOrSupervisor, Converter={StaticResource BoolToVis}}"/>
+<MenuItem Header="{Binding LanAutoRefreshButtonText}" Click="ToggleAutoRefresh_Click"
+                          Visibility="{Binding IsAdminOrSupervisor, Converter={StaticResource BoolToVis}}"/>
+
+                <Separator/>
+
+                
+                <MenuItem Header="Assign Faculty to Courses" Click="OpenCourseFacultyOverrides_Click"
+                          Visibility="{Binding IsAdminOrSupervisor, Converter={StaticResource BoolToVis}}"/>
+            </MenuItem>
+
+            
+            <MenuItem Header="Help">
+	                <MenuItem Header="Export Diagnostic Report" Click="ExportDiagnostics_Click"
+	                          Visibility="{Binding IsAdminOrSupervisor, Converter={StaticResource BoolToVis}}"/>
+	                <Separator/>
+                <MenuItem Header="About" Click="About_Click"/>
+            </MenuItem>
+        </Menu>
+
+        
+        <Grid Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            
+            <TextBlock Grid.Column="0"
+                       Text="University Academic Timetable Suite"
+                       Foreground="White"
+                       FontSize="20"
+                       FontWeight="SemiBold"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Right"/>
+</Grid>
+    </DockPanel>
+</Border>
+
+
+
+        
+        <Border DockPanel.Dock="Bottom" Background="White" Padding="6"
+                BorderBrush="#E5E7EB" BorderThickness="1,1,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Ready" VerticalAlignment="Center" Foreground="#6B7280"/>
+                <TextBlock Grid.Column="1"/>
+            </Grid>
+        </Border>
+
+        
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.6*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+
+            
+            <Border Grid.Column="0" Style="{StaticResource PanelBorder}" Margin="0,0,10,0">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock Text="Timetable Planning" Style="{StaticResource SectionHeader}"/>
+
+                        
+                        <TextBlock Text="Timetable Type" FontWeight="SemiBold"/>
+                        <ComboBox ItemsSource="{Binding ScheduleKinds}"
+                      SelectedItem="{Binding SelectedKind, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      Margin="0,4,0,12">
+
+                            <!-- English display for schedule type -->
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                
+                                                <Setter Property="Text" Value="{Binding}" />
+
+                                                <Style.Triggers>
+                                                    <!-- Training -->
+                                                    <DataTrigger Binding="{Binding}" Value="Training">
+                                                        <Setter Property="Text" Value="Academic Teaching Timetables" />
+                                                    </DataTrigger>
+
+                                                    <!-- Finals -->
+                                                    <DataTrigger Binding="{Binding}" Value="Finals">
+                                                        <Setter Property="Text" Value="Final Examination Timetables" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+
+                        </ComboBox>
+
+
+                        
+                        <Border x:Name="FinalsWipLeft"
+                                BorderBrush="#CBD5E1"
+                                BorderThickness="1"
+                                Background="#F8FAFC"
+                                CornerRadius="12"
+                                Padding="18"
+                                Margin="0,0,0,12">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedKind}" Value="Finals">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="Final Examination Timetables" FontSize="18" FontWeight="Bold" TextAlignment="Center"/>
+                                <TextBlock Text="Under development" FontSize="14" Margin="0,8,0,0" TextAlignment="Center"/>
+                                <TextBlock Text="Select another schedule type to continue." FontSize="12" Margin="0,6,0,0" Foreground="#6B7280" TextAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <StackPanel x:Name="TrainingControlsPanel">
+                            <StackPanel.Style>
+                                <Style TargetType="StackPanel">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedKind}" Value="Finals">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Style>
+
+                        
+                        <TextBlock Text="Department / Academic Programme" FontWeight="SemiBold"/>
+                        <ComboBox ItemsSource="{Binding Departments}"
+                      DisplayMemberPath="Name"
+                      SelectedItem="{Binding SelectedDepartment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      IsEnabled="{Binding CanSelectDepartment}"
+                      Margin="0,4,0,12"/>
+
+                        
+                        <TextBlock Text="Level" FontWeight="SemiBold"/>
+                        <ComboBox ItemsSource="{Binding Levels}"
+                          SelectedValuePath="."
+                          SelectedValue="{Binding SelectedLevel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      Margin="0,4,0,12"/>
+
+                        
+                        <TextBlock Text="Courses (optional: assign a faculty member, then specify the number of sections)"
+                       Margin="0,8,0,6" FontWeight="SemiBold"/>
+
+                        <DataGrid ItemsSource="{Binding PlanRows}"
+                      SelectedItem="{Binding SelectedPlanRow, Mode=TwoWay}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      CanUserReorderColumns="False"
+                      CanUserSortColumns="False"
+                      HeadersVisibility="Column"
+                      GridLinesVisibility="All"
+                      RowHeaderWidth="0"
+                      Margin="0,0,0,6"
+                      x:Name="OptionalCoursesGrid"
+                      ColumnWidth="*"
+                      MinColumnWidth="70"
+                      MinRowHeight="34"
+                      RowHeight="34"
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                      CanUserResizeColumns="True">
+
+
+                            <DataGrid.Resources>
+                                <Style TargetType="{x:Type DataGridCell}">
+                                    <Setter Property="Padding" Value="6,2"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                                <Style TargetType="{x:Type ComboBox}">
+                                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="MinWidth" Value="160"/>
+                                    <Setter Property="IsTextSearchEnabled" Value="True"/>
+                                </Style>
+                                <Style TargetType="{x:Type TextBox}">
+                                    <Setter Property="Padding" Value="6,2"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                </Style>
+                            </DataGrid.Resources>
+
+                            <DataGrid.Columns>
+
+                                
+                                <DataGridTemplateColumn Header="" Width="54" IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                <Button Content="＋" Width="26" Height="22" Margin="0,0,4,0"
+                                                        ToolTip="Add a section (faculty/time preference)"
+                                                        Command="{Binding DataContext.AddSectionOverrideCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        CommandParameter="{Binding}">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding SectionIndex}" Value="{x:Null}">
+                                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+
+                                                <Button Content="✖" Width="26" Height="22"
+                                                        ToolTip="Delete section"
+                                                        Command="{Binding DataContext.RemoveSectionOverrideCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        CommandParameter="{Binding}">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding SectionIndex}" Value="{x:Null}">
+                                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                
+                                <DataGridTextColumn Header="Course" Binding="{Binding CourseName}" Width="2*" MinWidth="240"
+                                                   IsReadOnly="True"/>
+
+                                
+                                <DataGridTextColumn Header="Section" Binding="{Binding DisplaySectionNumber}" Width="0.7*"
+                                                   MinWidth="70" IsReadOnly="True"/>
+
+                                
+                                <DataGridTextColumn Header="Hours/Week" Binding="{Binding HoursPerWeek}"
+                                                    Width="0.8*" MinWidth="100" MaxWidth="140" IsReadOnly="True"/>
+
+                                
+                                <DataGridTextColumn Header="Student Count" Binding="{Binding StudentsThisTerm}"
+                                                    Width="0.8*" MinWidth="100" MaxWidth="140"/>
+
+                
+                <DataGridTemplateColumn Header="Faculty Member" Width="1.6*" MinWidth="240">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox
+ItemsSource="{Binding DataContext.FacultiesInSelectedDepartment,
+                      RelativeSource={RelativeSource AncestorType=Window}}"
+DisplayMemberPath="Name"
+SelectedValuePath="Id"
+SelectedValue="{Binding PreferredFacultyId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+IsTextSearchEnabled="True"
+SelectionChanged="PlanFaculty_SelectionChanged"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Faculty Member (Any Department)" Width="1.4*" MinWidth="200">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox
+ItemsSource="{Binding DataContext.Faculties,
+                      RelativeSource={RelativeSource AncestorType=Window}}"
+DisplayMemberPath="Name"
+SelectedValuePath="Id"
+SelectedValue="{Binding PreferredFacultyId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+IsTextSearchEnabled="True"
+SelectionChanged="PlanFaculty_SelectionChanged"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Room" Width="1.1*" MinWidth="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox
+ItemsSource="{Binding DataContext.Store.Rooms,
+                      RelativeSource={RelativeSource AncestorType=Window}}"
+DisplayMemberPath="Name"
+SelectedValuePath="Id"
+SelectedValue="{Binding PreferredRoomId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+IsEditable="False"
+IsTextSearchEnabled="True"
+MinHeight="32"
+Padding="10,2"
+HorizontalContentAlignment="Right"
+VerticalContentAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+
+                                <DataGridTemplateColumn Header="Time Slots" Width="1.4*" MinWidth="210" IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+                                                
+                                                <Button Tag="THEORY" Padding="8,2" Margin="0,0,6,0"
+                                                        Content="Lecture"
+                                                        ToolTip="{Binding SlotsSummary}"
+                                                        IsEnabled="{Binding HasTheoryPart}"
+                                                        Click="PickPlanSlots_Click">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button">
+                                                            <Setter Property="Opacity" Value="1"/>
+                                                            <Style.Triggers>
+                                                                <Trigger Property="IsEnabled" Value="False">
+                                                                    <Setter Property="Opacity" Value="0.35"/>
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+
+                                                
+                                                <Button Tag="LAB" Padding="8,2"
+                                                        Content="Lab"
+                                                        ToolTip="{Binding SlotsSummary}"
+                                                        IsEnabled="{Binding HasPracticalPart}"
+                                                        Click="PickPlanSlots_Click">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button">
+                                                            <Setter Property="Opacity" Value="1"/>
+                                                            <Style.Triggers>
+                                                                <Trigger Property="IsEnabled" Value="False">
+                                                                    <Setter Property="Opacity" Value="0.35"/>
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                
+                                <DataGridTextColumn Header="Sections" Binding="{Binding SectionsRequested}"
+                                                    Width="0.8*" MinWidth="110" MaxWidth="160"/>
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+
+                        
+                        <Grid Margin="0,6,0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="180"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Style="{StaticResource SolidButton}" Content="Add Selected Course to Plan"
+                        Command="{Binding AddCurrentDeptToPlanCommand}"/>
+                            <Button Grid.Column="1" Style="{StaticResource SolidButton}" Content="Add Current Programme to Plan"
+                        Click="AddAllDeptPlan_Click" Margin="8,6,0,0"/>
+                        </Grid>
+
+	                        
+	                        <Button Style="{StaticResource SolidButton}"
+	                                Content="Build Plan from Expected Enrolment"
+	                                Command="{Binding BuildQueuedPlanFromExpectedRegistrationCommand}"
+	                                Margin="0,0,0,10"/>
+
+                        
+                        <Expander Header="Selected Plan (Multiple Programmes)" IsExpanded="True" Margin="0,0,0,8">
+                            <StackPanel>
+
+                                <DataGrid ItemsSource="{Binding QueuedPlan}"
+                              SelectedItem="{Binding SelectedQueuedPlanRow, Mode=TwoWay}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              HeadersVisibility="Column"
+                              Height="220"
+                              Margin="0,0,0,6"
+                              ColumnWidth="*"
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                              CanUserResizeColumns="True"
+                              FrozenColumnCount="1"
+                              x:Name="QueuedPlanGrid">
+
+                                    <DataGrid.Columns>
+
+                                        <DataGridTemplateColumn Header=""
+                                                    DisplayIndex="6"
+                                                    Width="72"
+                                                    MinWidth="72"
+                                                    CanUserResize="False"
+                                                    IsReadOnly="True">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Button Content="Delete"
+                                                Padding="8,4"
+                                                Command="{Binding DataContext.RemoveQueuedItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                CommandParameter="{Binding}" />
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+
+                                        <DataGridTextColumn Header="Department"
+                                                Binding="{Binding DepartmentName}"
+                                                Width="1.4*"
+                                                MinWidth="180" />
+
+                                        <DataGridTextColumn Header="Level"
+                                                Binding="{Binding Level}"
+                                                Width="Auto"
+                                                MinWidth="60"
+                                                MaxWidth="110"
+                                                IsReadOnly="True" />
+
+                                        <DataGridTextColumn Header="Course"
+                                                Binding="{Binding CourseName}"
+                                                Width="2*"
+                                                MinWidth="220"
+                                                IsReadOnly="True" />
+
+                                        <DataGridTextColumn Header="Sections"
+                                               Binding="{Binding SectionIndex}"
+                                                Width="Auto"
+                                                MinWidth="80"
+                                                MaxWidth="120" />
+
+                                        <DataGridTemplateColumn Header="Faculty Member" Width="1.2*" MinWidth="160">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <ComboBox
+                                                        ItemsSource="{Binding DataContext.Store.Faculties,
+                                                              RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        DisplayMemberPath="Name"
+                                                        SelectedValuePath="Id"
+                                                        SelectedValue="{Binding PreferredFacultyId, Mode=TwoWay}"
+                                                        IsEditable="True"
+                                                        IsTextSearchEnabled="True"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+
+                                        <DataGridTemplateColumn Header="Room" Width="1.2*" MinWidth="160">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <ComboBox
+                                                        ItemsSource="{Binding DataContext.Store.Rooms,
+                                                              RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        DisplayMemberPath="Name"
+                                                        SelectedValuePath="Id"
+																	SelectedValue="{Binding PreferredRoomId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+																	IsEditable="False"
+																	IsTextSearchEnabled="True"
+																	MinHeight="32"
+																	Padding="10,2"
+																	HorizontalContentAlignment="Right"
+																	VerticalContentAlignment="Center"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+
+
+                                        <DataGridTemplateColumn Header="Time Slots" Width="1.2*" MinWidth="170" IsReadOnly="True">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+                                                        
+                                                        <Button Tag="THEORY" Padding="8,2" Margin="0,0,6,0"
+                                                                Content="Lecture"
+                                                                ToolTip="{Binding SlotsSummary}"
+                                                                IsEnabled="{Binding HasTheoryPart}"
+                                                                Click="PickQueuedSlots_Click">
+                                                            <Button.Style>
+                                                                <Style TargetType="Button">
+                                                                    <Setter Property="Opacity" Value="1"/>
+                                                                    <Style.Triggers>
+                                                                        <Trigger Property="IsEnabled" Value="False">
+                                                                            <Setter Property="Opacity" Value="0.35"/>
+                                                                        </Trigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Button.Style>
+                                                        </Button>
+
+                                                        
+                                                        <Button Tag="LAB" Padding="8,2"
+                                                                Content="Lab"
+                                                                ToolTip="{Binding SlotsSummary}"
+                                                                IsEnabled="{Binding HasPracticalPart}"
+                                                                Click="PickQueuedSlots_Click">
+                                                            <Button.Style>
+                                                                <Style TargetType="Button">
+                                                                    <Setter Property="Opacity" Value="1"/>
+                                                                    <Style.Triggers>
+                                                                        <Trigger Property="IsEnabled" Value="False">
+                                                                            <Setter Property="Opacity" Value="0.35"/>
+                                                                        </Trigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Button.Style>
+                                                        </Button>
+
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+
+                                    </DataGrid.Columns>
+                                </DataGrid>
+
+                                
+                                <StackPanel Orientation="Horizontal" Margin="0,6,0,6">
+                                    <Button Content="University Master Timetable" Padding="14,6" Width="180"
+                                Click="OpenMasterBoard_Click"/>
+                                    <TextBlock Text="Opens the weekly timetable board for all programmes" VerticalAlignment="Center" Margin="8,0,0,0" Foreground="#6B7280"/>
+                                </StackPanel>
+
+                                
+                            </StackPanel>
+                        </Expander>
+
+                        
+                        <Button Style="{StaticResource SolidButton}"
+                    Content="Generate Timetable (F5)"
+                    Command="{Binding GenerateCommand}"/>
+                        
+                        <Button Content="Clear Generated Timetable (Administrator)"
+                    Command="{Binding ClearScheduleCommand}"
+                    Style="{StaticResource SolidButton}"
+                    Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"
+                    HorizontalAlignment="Stretch"
+                    MinHeight="44"
+                    Margin="0,8,0,0"/>
+
+                        <Button Content="Clear Current Department"
+                    Command="{Binding ClearDepartmentCommand}"
+                    Style="{StaticResource SolidButton}"
+                    Visibility="{Binding IsSupervisor, Converter={StaticResource BoolToVis}}"
+                    HorizontalAlignment="Stretch"
+                    MinHeight="44"
+                    Margin="0,8,0,0"/>
+
+                        </StackPanel>
+
+
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+            
+            
+                                    <Border Grid.Column="1" Style="{StaticResource PanelBorder}">
+                <TabControl x:Name="MainDisplayTabs" Padding="0" Margin="0"
+                            SelectionChanged="MainDisplayTabs_SelectionChanged">
+                    <TabItem Header="Generated Timetable Results">
+                        <Grid>
+                            <Border Margin="0,0,0,10" Padding="16" CornerRadius="10"
+                                    Background="#FEF3C7" BorderBrush="#F59E0B" BorderThickness="1">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedKind}" Value="Finals">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <StackPanel>
+                                    <TextBlock Text="🚧 The examination timetable module is under development"
+                                               FontWeight="Bold" FontSize="16" Margin="0,0,0,6"/>
+                                    <TextBlock Text="The academic timetable view is currently displayed here. Use the tabs above to review department, faculty member, or student timetables."
+                                               TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Border>
+                            <DockPanel x:Name="ResultsPanel">
+                                                                                <DockPanel.Style>
+                                                                                    <Style TargetType="DockPanel">
+                                                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                                                        <Style.Triggers>
+                                                                                            <DataTrigger Binding="{Binding SelectedKind}" Value="Finals">
+                                                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                                                            </DataTrigger>
+                                                                                        </Style.Triggers>
+                                                                                    </Style>
+                                                                                </DockPanel.Style>
+                                                                                <TextBlock DockPanel.Dock="Top"
+                                                                       Text="Generated Timetable Results:"
+                                                                       FontSize="20"
+                                                                       FontWeight="Bold"
+                                                                       Margin="0,0,0,10"/>
+
+                                                                                <DataGrid x:Name="ResultsGrid"
+                                                                      ItemsSource="{Binding Rows}"
+                                                                      SelectedItem="{Binding SelectedRow, Mode=TwoWay}"
+                                                                      AutoGenerateColumns="False"
+                                                                      IsReadOnly="True"
+                                                                      HeadersVisibility="Column"
+                                                                      CanUserAddRows="False"
+                                                                      CanUserDeleteRows="False">
+                                                                                    <DataGrid.Columns>
+
+                                                                                        
+                                                                                        <DataGridTextColumn Header="Status"
+                                                                                        Binding="{Binding Status}"
+                                                                                        Width="Auto"/>
+
+                                                                                        <DataGridTextColumn Header="Department"
+                                                                                        Binding="{Binding Department}"
+                                                                                        Width="*"/>
+
+                                                                                        <DataGridTextColumn Header="Course"
+                                                                                        Binding="{Binding Course}"
+                                                                                        Width="*"/>
+
+                                                                                        <DataGridTextColumn Header="Type"
+                                                                                        Binding="{Binding Kind}"
+                                                                                        Width="80"
+                                                                                        IsReadOnly="True"/>
+
+                                                                                        <DataGridTextColumn Header="Section"
+                                                                                        Binding="{Binding Section}"
+                                                                                        Width="Auto"/>
+
+                                                                                        <DataGridTextColumn Header="Time Slot"
+                                                                                        Binding="{Binding Slot}"
+                                                                                        Width="*"/>
+
+                                                                                        <DataGridTextColumn Header="Hours"
+                                                                                        Binding="{Binding Hours}"
+                                                                                        Width="80"/>
+
+                                                                                        <DataGridTextColumn Header="Faculty Member"
+                                                                                        Binding="{Binding Faculty}"
+                                                                                        Width="*"/>
+
+                                                                                        <DataGridTextColumn Header="Room"
+                                                                                        Binding="{Binding Room}"
+                                                                                        Width="*"/>
+
+                                                                                        
+                                                                                        <DataGridTemplateColumn Header="Delete" Width="70">
+                                                                                            <DataGridTemplateColumn.CellTemplate>
+                                                                                                <DataTemplate>
+                                                                                                    <Button Content="Delete"
+                                                                                        Padding="8,2"
+                                                                                        Command="{Binding DataContext.RemoveGeneratedForCourseCommand,
+                                                                                                          RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                                                        CommandParameter="{Binding}" />
+                                                                                                </DataTemplate>
+                                                                                            </DataGridTemplateColumn.CellTemplate>
+                                                                                        </DataGridTemplateColumn>
+
+                                                                                    </DataGrid.Columns>
+                                                                                </DataGrid>
+
+
+
+                                                                            </DockPanel>
+                        </Grid>
+                    </TabItem>
+
+                    <TabItem Header="Department Timetable">
+                        <ContentControl x:Name="DepartmentScheduleHost"/>
+                    </TabItem>
+
+                    <TabItem Header="Faculty Timetable">
+                        <ContentControl x:Name="FacultyScheduleHost"/>
+                    </TabItem>
+
+                    <TabItem Header="Student Timetable">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            
+
+
+
+                            <TabControl Grid.Row="0">
+                                <TabItem Header="Student Timetable">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+
+                                        <Border Grid.Row="0" Margin="0,0,0,8" Padding="10" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="10">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="260"/>
+                                                    <ColumnDefinition Width="140"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <TextBlock Text="Department:" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                    <ComboBox Width="190"
+                                                              ItemsSource="{Binding StudentFilterDepartments}"
+                                                              DisplayMemberPath="Name"
+                                                              SelectedValuePath="Id"
+                                                              SelectedValue="{Binding StudentFilterDepartmentId, Mode=TwoWay}"
+                                                              IsEnabled="{Binding IsStudentFilterDepartmentEditable}"/>
+                                                </StackPanel>
+
+                                                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <TextBlock Text="Level:" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                    <ComboBox Width="80"
+                                                              ItemsSource="{Binding StudentFilterLevels}"
+                                                              SelectedItem="{Binding StudentFilterLevel, Mode=TwoWay}">
+                                                        <ComboBox.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <TextBlock>
+                                                                    <TextBlock.Style>
+                                                                        <Style TargetType="TextBlock">
+                                                                            <Setter Property="Text" Value="{Binding}"/>
+                                                                            <Style.Triggers>
+                                                                                <DataTrigger Binding="{Binding}" Value="0">
+                                                                                    <Setter Property="Text" Value="All"/>
+                                                                                </DataTrigger>
+                                                                            </Style.Triggers>
+                                                                        </Style>
+                                                                    </TextBlock.Style>
+                                                                </TextBlock>
+                                                            </DataTemplate>
+                                                        </ComboBox.ItemTemplate>
+                                                    </ComboBox>
+                                                </StackPanel>
+
+                                                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <TextBlock Text="Search:" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                    <TextBox MinWidth="240"
+                                                             Text="{Binding StudentFilterText, UpdateSourceTrigger=PropertyChanged}"
+                                                             ToolTip="Search by student number, name, or course"/>
+                                                </StackPanel>
+
+                                                <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Button Content="Refresh" Margin="0,0,8,0" Padding="14,6"
+                                                            Style="{StaticResource SolidButton}"
+                                                            Command="{Binding RefreshStudentScheduleCommand}"/>
+                                                    <Button Content="Export CSV (Timetable)" Padding="14,6"
+                                                            Style="{StaticResource SolidButton}"
+                                                            Command="{Binding ExportStudentScheduleCsvCommand}"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+
+                                        <DataGrid Grid.Row="1" x:Name="StudentScheduleGrid"
+                                                  ItemsSource="{Binding StudentScheduleRows}"
+                                                  AutoGenerateColumns="False"
+                                                  CanUserAddRows="False"
+                                                  IsReadOnly="True"
+                                                  GridLinesVisibility="Horizontal"
+                                                  HeadersVisibility="Column"
+                                                  RowHeaderWidth="0">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="No." Binding="{Binding StudentNo}" Width="80"/>
+                                            <DataGridTextColumn Header="Student Name" Binding="{Binding StudentName}" Width="220"/>
+                                            <DataGridTextColumn Header="Department" Binding="{Binding DepartmentName}" Width="160"/>
+                                            <DataGridTextColumn Header="Level" Binding="{Binding Level}" Width="70"/>
+                                            <DataGridTextColumn Header="Course" Binding="{Binding CourseDisplay}" Width="260"/>
+                                            <DataGridTextColumn Header="Section" Binding="{Binding SectionIndex}" Width="70"/>
+                                            <DataGridTextColumn Header="Type" Binding="{Binding KindAr}" Width="70"/>
+                                            <DataGridTextColumn Header="Faculty Member" Binding="{Binding FacultyName}" Width="180"/>
+                                            <DataGridTextColumn Header="Time Slot" Binding="{Binding SlotLabel}" Width="170"/>
+                                            <DataGridTextColumn Header="Room" Binding="{Binding RoomName}" Width="120"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                    </Grid>
+                                </TabItem>
+
+                                <TabItem Header="Unassigned">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+
+                                        <Border Grid.Row="0" Margin="0,0,0,8" Padding="10" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="10">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="260"/>
+                                                    <ColumnDefinition Width="140"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <TextBlock Text="Department:" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                    <ComboBox Width="190"
+                                                              ItemsSource="{Binding StudentFilterDepartments}"
+                                                              DisplayMemberPath="Name"
+                                                              SelectedValuePath="Id"
+                                                              SelectedValue="{Binding StudentFilterDepartmentId, Mode=TwoWay}"
+                                                              IsEnabled="{Binding IsStudentFilterDepartmentEditable}"/>
+                                                </StackPanel>
+
+                                                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <TextBlock Text="Level:" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                    <ComboBox Width="80"
+                                                              ItemsSource="{Binding StudentFilterLevels}"
+                                                              SelectedItem="{Binding StudentFilterLevel, Mode=TwoWay}">
+                                                        <ComboBox.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <TextBlock>
+                                                                    <TextBlock.Style>
+                                                                        <Style TargetType="TextBlock">
+                                                                            <Setter Property="Text" Value="{Binding}"/>
+                                                                            <Style.Triggers>
+                                                                                <DataTrigger Binding="{Binding}" Value="0">
+                                                                                    <Setter Property="Text" Value="All"/>
+                                                                                </DataTrigger>
+                                                                            </Style.Triggers>
+                                                                        </Style>
+                                                                    </TextBlock.Style>
+                                                                </TextBlock>
+                                                            </DataTemplate>
+                                                        </ComboBox.ItemTemplate>
+                                                    </ComboBox>
+                                                </StackPanel>
+
+                                                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <TextBlock Text="Search:" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                    <TextBox MinWidth="240"
+                                                             Text="{Binding StudentFilterText, UpdateSourceTrigger=PropertyChanged}"
+                                                             ToolTip="Search by student number, name, or course"/>
+                                                </StackPanel>
+
+                                                <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Button Content="Refresh" Margin="0,0,8,0" Padding="14,6"
+                                                            Style="{StaticResource SolidButton}"
+                                                            Command="{Binding RefreshStudentScheduleCommand}"/>
+                                                    <Button Content="Export CSV (Unassigned)" Padding="14,6"
+                                                            Style="{StaticResource SolidButton}"
+                                                            Command="{Binding ExportStudentUnassignedCsvCommand}"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+
+                                        <DataGrid Grid.Row="1" x:Name="StudentUnassignedGrid"
+                                                  ItemsSource="{Binding StudentUnassignedRows}"
+                                                  AutoGenerateColumns="False"
+                                                  CanUserAddRows="False"
+                                                  IsReadOnly="True"
+                                                  GridLinesVisibility="Horizontal"
+                                                  HeadersVisibility="Column"
+                                                  RowHeaderWidth="0">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="No." Binding="{Binding StudentNo}" Width="80"/>
+                                            <DataGridTextColumn Header="Student Name" Binding="{Binding StudentName}" Width="220"/>
+                                            <DataGridTextColumn Header="Department" Binding="{Binding DepartmentName}" Width="160"/>
+                                            <DataGridTextColumn Header="Level" Binding="{Binding Level}" Width="70"/>
+                                            <DataGridTextColumn Header="Course" Binding="{Binding CourseDisplay}" Width="260"/>
+                                            <DataGridTextColumn Header="Type" Binding="{Binding KindAr}" Width="70"/>
+                                            <DataGridTextColumn Header="Reason" Binding="{Binding Reason}" Width="150"/>
+                                            <DataGridTextColumn Header="Details" Binding="{Binding Details}" Width="*">
+                                                <DataGridTextColumn.ElementStyle>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="TextWrapping" Value="Wrap"/>
+                                                    </Style>
+                                                </DataGridTextColumn.ElementStyle>
+                                            </DataGridTextColumn>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                    </Grid>
+                                </TabItem>
+
+                                <!-- Weekly grid view (Lazy by department -> student) -->
+                                <TabItem Header="Weekly Timetable">
+                                    <Grid Margin="0,8,0,0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <!-- Filters: Department then Student (same UX idea as faculty tab) -->
+                                        <Border Grid.Row="0" Margin="0,0,0,8" Padding="10"
+                                                BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="10">
+                                            <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <TextBlock Text="Department:" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                    <ComboBox Width="260" MinWidth="220"
+                                                              ItemsSource="{Binding StudentWeeklyDepartments}"
+                                                              DisplayMemberPath="Name"
+                                                              SelectedValuePath="Id"
+                                                              SelectedValue="{Binding StudentWeeklyDepartmentId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                </StackPanel>
+
+                                                <StackPanel Grid.Column="1" Margin="12,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <TextBlock Text="Student Name:" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                    <ComboBox Width="340" MinWidth="260"
+                                                              ItemsSource="{Binding StudentWeeklyStudents}"
+                                                              SelectedItem="{Binding SelectedStudentWeeklyStudent, Mode=TwoWay}"
+                                                              IsEditable="True"
+                                                              IsTextSearchEnabled="False"
+                                                              TextSearch.TextPath="FullName"
+                                                              StaysOpenOnEdit="True"
+                                                              Text="{Binding StudentWeeklyStudentText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                                        <ComboBox.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <TextBlock>
+                                                                    <Run Text="{Binding StudentNo}"/>
+                                                                    <Run Text=" — "/>
+                                                                    <Run Text="{Binding FullName}"/>
+                                                                </TextBlock>
+                                                            </DataTemplate>
+                                                        </ComboBox.ItemTemplate>
+                                                    </ComboBox>
+                                                </StackPanel>
+
+                                                <TextBlock Grid.Column="2" Margin="12,0,0,0" VerticalAlignment="Center" Foreground="#6B7280"
+                                                           Text="{Binding StudentWeeklyStudentsStatusText}"
+                                                           TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" MaxWidth="520"/>
+
+                                                <Button Grid.Column="3" Margin="12,0,0,0" Content="Refresh" Padding="14,6"
+                                                        Style="{StaticResource SolidButton}"
+                                                        Command="{Binding RefreshStudentWeeklyStudentsCommand}"/>
+                                            </Grid>
+                                        </Border>
+
+                                        <!-- Weekly grid -->
+                                        <Border Grid.Row="1" Padding="10"
+                                                BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="10">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <ProgressBar Grid.Row="0" Height="4" Margin="0,0,0,8" IsIndeterminate="True">
+                                                    <ProgressBar.Style>
+                                                        <Style TargetType="ProgressBar">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsStudentWeeklyScheduleBusy}" Value="True">
+                                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </ProgressBar.Style>
+                                                </ProgressBar>
+
+                                                <views:GeneralScheduleGrid Grid.Row="1" DataContext="{Binding StudentWeeklyGeneralProxy}"/>
+                                            </Grid>
+                                        </Border>
+
+                                        <TextBlock Grid.Row="2" Margin="6,8,6,0" Foreground="#6B7280"
+                                                   Text="{Binding StudentWeeklyScheduleStatusText}"/>
+                                    </Grid>
+                                </TabItem>
+                            </TabControl>
+
+                            <TextBlock Grid.Row="1" Margin="6,8,6,0" Foreground="#6B7280"
+                                       Text="{Binding StudentsStatusText}"/>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+            </Border>
+
+
+        </Grid>
+        <!-- Footer -->
+        
+    </DockPanel>
+</Window>

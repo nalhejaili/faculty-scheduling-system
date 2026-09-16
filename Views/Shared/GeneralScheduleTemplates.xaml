@@ -1,0 +1,55 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style x:Key="GeneralSchedule.HeaderCell" TargetType="Border">
+        <Setter Property="Background" Value="#F5F7FA"/>
+        <Setter Property="BorderBrush" Value="#D8DFE8"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="10,6"/>
+    </Style>
+
+    <Style x:Key="GeneralSchedule.CellBorder" TargetType="Border">
+        <Setter Property="BorderBrush" Value="#D8DFE8"/>
+        <Setter Property="BorderThickness" Value="0,0,1,1"/>
+        <Setter Property="Padding" Value="10"/>
+    </Style>
+
+    <Style TargetType="TextBlock">
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="TextAlignment" Value="Center"/>
+    </Style>
+
+    
+    <DataTemplate x:Key="GeneralSchedule.Cell.Strings">
+        <Border Style="{StaticResource GeneralSchedule.CellBorder}">
+            <ItemsControl ItemsSource="{Binding}" HorizontalContentAlignment="Stretch">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel/>
+                        
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,6"
+                    Padding="8"
+                    CornerRadius="8"
+                    Background="#F9FBFE"
+                    BorderBrush="#E4E8EF"
+                    BorderThickness="1">
+                            <TextBlock Text="{Binding}" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+
+                <ItemsControl.ItemContainerStyle>
+                    <Style TargetType="ContentPresenter">
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+            </ItemsControl>
+        </Border>
+    </DataTemplate>
+
+</ResourceDictionary>

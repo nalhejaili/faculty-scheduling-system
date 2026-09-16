@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    
+    <Style TargetType="Window">
+        <Setter Property="Icon" Value="/MiniTrainerScheduler;component/Assets/Icons/app.ico"/>
+    </Style>
+
+    
+    <BitmapImage x:Key="AppLogo32"
+                 UriSource="/MiniTrainerScheduler;component/Assets/Logos/app_logo.png"/>
+</ResourceDictionary>

@@ -1,0 +1,21 @@
+﻿<Window x:Class="MiniTrainerScheduler.Views.FacultyTotalsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Faculty Workload Totals" Height="520" Width="620"
+        FlowDirection="LeftToRight" WindowStartupLocation="CenterOwner">
+    <DockPanel Margin="12">
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,0,0,8">
+            <TextBlock Text="Faculty Workload Totals" FontSize="16" FontWeight="Bold"/>
+            <TextBlock Margin="10,0,0,0"
+                 Text="{Binding FacultyTotals.Count, StringFormat=  (Faculty members: {0})}"/>
+        </StackPanel>
+
+        <DataGrid ItemsSource="{Binding FacultyTotals}"
+              AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Faculty Member" Binding="{Binding Faculty}" Width="*"/>
+                <DataGridTextColumn Header="Total Hours" Binding="{Binding TotalHours}" Width="150"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</Window>

@@ -1,0 +1,254 @@
+﻿<Window x:Class="MiniTrainerScheduler.Views.ManualSlotsPickerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Select Weekly Class Meeting Times"
+        Height="450"
+        Width="700"
+        WindowStartupLocation="CenterOwner"
+        FlowDirection="LeftToRight"
+        ResizeMode="NoResize">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        
+        <StackPanel Grid.Row="0" Margin="0,0,0,8">
+            
+            <TextBlock Text="{Binding HeaderText}"
+                       FontSize="16"
+                       FontWeight="Bold"
+                       Margin="0,0,0,4"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding RequirementLabel}"/>
+                <TextBlock Text="{Binding MaxSlots}"/>
+                <TextBlock Text="  —  Selected time slots: "/>
+                <TextBlock Text="{Binding SelectedCount}"/>
+            </StackPanel>
+        </StackPanel>
+
+        
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" BorderThickness="0,0,0,1" BorderBrush="#CCCCCC" Padding="4">
+                    <TextBlock Text="Time" HorizontalAlignment="Center" FontWeight="Bold"/>
+                </Border>
+                <Border Grid.Column="1" BorderThickness="0,0,0,1" BorderBrush="#CCCCCC" Padding="4">
+                    <TextBlock Text="Sunday" HorizontalAlignment="Center" FontWeight="Bold"/>
+                </Border>
+                <Border Grid.Column="2" BorderThickness="0,0,0,1" BorderBrush="#CCCCCC" Padding="4">
+                    <TextBlock Text="Monday" HorizontalAlignment="Center" FontWeight="Bold"/>
+                </Border>
+                <Border Grid.Column="3" BorderThickness="0,0,0,1" BorderBrush="#CCCCCC" Padding="4">
+                    <TextBlock Text="Tuesday" HorizontalAlignment="Center" FontWeight="Bold"/>
+                </Border>
+                <Border Grid.Column="4" BorderThickness="0,0,0,1" BorderBrush="#CCCCCC" Padding="4">
+                    <TextBlock Text="Wednesday" HorizontalAlignment="Center" FontWeight="Bold"/>
+                </Border>
+                <Border Grid.Column="5" BorderThickness="0,0,0,1" BorderBrush="#CCCCCC" Padding="4">
+                    <TextBlock Text="Thursday" HorizontalAlignment="Center" FontWeight="Bold"/>
+                </Border>
+            </Grid>
+
+            
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding Rows}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,2,0,2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                
+                                <Border Grid.Column="0"
+                                        BorderBrush="#DDDDDD"
+                                        BorderThickness="0,0,0,0"
+                                        Padding="2">
+                                    <TextBlock Text="{Binding TimeText}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                </Border>
+
+                                
+                                <Border Grid.Column="1" Padding="2">
+                                    <ToggleButton IsChecked="{Binding Cells[0].IsSelected, Mode=TwoWay}"
+                                                  IsEnabled="{Binding Cells[0].IsEnabled}">
+                                        <ToggleButton.Template>
+                                            <ControlTemplate TargetType="ToggleButton">
+                                                <Grid>
+                                                    <Ellipse x:Name="Circle"
+                                                             Width="20"
+                                                             Height="20"
+                                                             StrokeThickness="1.5"
+                                                             Stroke="#999999"
+                                                             Fill="#EEEEEE"/>
+                                                </Grid>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Setter TargetName="Circle" Property="Fill" Value="#C8F7C5"/>
+                                                        <Setter TargetName="Circle" Property="Stroke" Value="#27AE60"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter TargetName="Circle" Property="Opacity" Value="0.35"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </ToggleButton.Template>
+                                    </ToggleButton>
+                                </Border>
+
+                                <Border Grid.Column="2" Padding="2">
+                                    <ToggleButton IsChecked="{Binding Cells[1].IsSelected, Mode=TwoWay}"
+                                                  IsEnabled="{Binding Cells[1].IsEnabled}">
+                                        <ToggleButton.Template>
+                                            <ControlTemplate TargetType="ToggleButton">
+                                                <Grid>
+                                                    <Ellipse x:Name="Circle"
+                                                             Width="20"
+                                                             Height="20"
+                                                             StrokeThickness="1.5"
+                                                             Stroke="#999999"
+                                                             Fill="#EEEEEE"/>
+                                                </Grid>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Setter TargetName="Circle" Property="Fill" Value="#C8F7C5"/>
+                                                        <Setter TargetName="Circle" Property="Stroke" Value="#27AE60"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter TargetName="Circle" Property="Opacity" Value="0.35"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </ToggleButton.Template>
+                                    </ToggleButton>
+                                </Border>
+
+                                <Border Grid.Column="3" Padding="2">
+                                    <ToggleButton IsChecked="{Binding Cells[2].IsSelected, Mode=TwoWay}"
+                                                  IsEnabled="{Binding Cells[2].IsEnabled}">
+                                        <ToggleButton.Template>
+                                            <ControlTemplate TargetType="ToggleButton">
+                                                <Grid>
+                                                    <Ellipse x:Name="Circle"
+                                                             Width="20"
+                                                             Height="20"
+                                                             StrokeThickness="1.5"
+                                                             Stroke="#999999"
+                                                             Fill="#EEEEEE"/>
+                                                </Grid>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Setter TargetName="Circle" Property="Fill" Value="#C8F7C5"/>
+                                                        <Setter TargetName="Circle" Property="Stroke" Value="#27AE60"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter TargetName="Circle" Property="Opacity" Value="0.35"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </ToggleButton.Template>
+                                    </ToggleButton>
+                                </Border>
+
+                                <Border Grid.Column="4" Padding="2">
+                                    <ToggleButton IsChecked="{Binding Cells[3].IsSelected, Mode=TwoWay}"
+                                                  IsEnabled="{Binding Cells[3].IsEnabled}">
+                                        <ToggleButton.Template>
+                                            <ControlTemplate TargetType="ToggleButton">
+                                                <Grid>
+                                                    <Ellipse x:Name="Circle"
+                                                             Width="20"
+                                                             Height="20"
+                                                             StrokeThickness="1.5"
+                                                             Stroke="#999999"
+                                                             Fill="#EEEEEE"/>
+                                                </Grid>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Setter TargetName="Circle" Property="Fill" Value="#C8F7C5"/>
+                                                        <Setter TargetName="Circle" Property="Stroke" Value="#27AE60"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter TargetName="Circle" Property="Opacity" Value="0.35"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </ToggleButton.Template>
+                                    </ToggleButton>
+                                </Border>
+
+                                <Border Grid.Column="5" Padding="2">
+                                    <ToggleButton IsChecked="{Binding Cells[4].IsSelected, Mode=TwoWay}"
+                                                  IsEnabled="{Binding Cells[4].IsEnabled}">
+                                        <ToggleButton.Template>
+                                            <ControlTemplate TargetType="ToggleButton">
+                                                <Grid>
+                                                    <Ellipse x:Name="Circle"
+                                                             Width="20"
+                                                             Height="20"
+                                                             StrokeThickness="1.5"
+                                                             Stroke="#999999"
+                                                             Fill="#EEEEEE"/>
+                                                </Grid>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Setter TargetName="Circle" Property="Fill" Value="#C8F7C5"/>
+                                                        <Setter TargetName="Circle" Property="Stroke" Value="#27AE60"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter TargetName="Circle" Property="Opacity" Value="0.35"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </ToggleButton.Template>
+                                    </ToggleButton>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+
+        
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,8,0,0">
+            <Button Content="Confirm"
+                    Width="100"
+                    Margin="5,0,0,0"
+                    IsDefault="True" IsEnabled="{Binding CanAccept}" Click="Ok_Click"/>
+            <Button Content="Cancel"
+                    Width="100"
+                    IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

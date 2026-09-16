@@ -1,0 +1,20 @@
+﻿<Window x:Class="MiniTrainerScheduler.Views.DepartmentSchedulePrintWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:v="clr-namespace:MiniTrainerScheduler.Views.Controls"
+        Title="Department Timetable Print Layout"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Opacity="0"
+        Width="1200"
+        Height="900"
+        FlowDirection="LeftToRight">
+
+    
+    <Grid x:Name="PrintRoot" Background="White">
+        <v:GeneralScheduleGrid/>
+    </Grid>
+</Window>

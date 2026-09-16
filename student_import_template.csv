@@ -1,0 +1,5 @@
+Student Number,Student Name,Department,Academic Level,Course Code,Course Name,Priority,Repeat,Term Key
+2026001,Student 001,Computer Science,3,CS301,Operating Systems,0,No,2026-S1
+2026001,Student 001,Computer Science,3,CS315,Database Systems,1,No,2026-S1
+2026002,Student 002,Information Systems,2,IS220,System Analysis,0,Yes,2026-S1
+2026003,Student 003,General Studies,1,,,,,2026-S1

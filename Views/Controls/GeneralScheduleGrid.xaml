@@ -1,0 +1,106 @@
+﻿<UserControl x:Class="MiniTrainerScheduler.Views.Controls.GeneralScheduleGrid"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             FlowDirection="LeftToRight">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Shared/GeneralScheduleTemplates.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                  VerticalScrollBarVisibility="Auto">
+        <Grid Margin="8" Grid.IsSharedSizeScope="True">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="160" SharedSizeGroup="Time"/>
+                
+                <ColumnDefinition Width="*"   SharedSizeGroup="Day"/>
+                
+                <ColumnDefinition Width="*"   SharedSizeGroup="Day"/>
+                
+                <ColumnDefinition Width="*"   SharedSizeGroup="Day"/>
+                
+                <ColumnDefinition Width="*"   SharedSizeGroup="Day"/>
+                
+                <ColumnDefinition Width="*"   SharedSizeGroup="Day"/>
+                
+            </Grid.ColumnDefinitions>
+
+            
+            <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource GeneralSchedule.HeaderCell}">
+                <TextBlock Text="Time" FontWeight="SemiBold"/>
+            </Border>
+            <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource GeneralSchedule.HeaderCell}">
+                <TextBlock Text="Sunday" FontWeight="SemiBold"/>
+            </Border>
+            <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource GeneralSchedule.HeaderCell}">
+                <TextBlock Text="Monday" FontWeight="SemiBold"/>
+            </Border>
+            <Border Grid.Row="0" Grid.Column="3" Style="{StaticResource GeneralSchedule.HeaderCell}">
+                <TextBlock Text="Tuesday" FontWeight="SemiBold"/>
+            </Border>
+            <Border Grid.Row="0" Grid.Column="4" Style="{StaticResource GeneralSchedule.HeaderCell}">
+                <TextBlock Text="Wednesday" FontWeight="SemiBold"/>
+            </Border>
+            <Border Grid.Row="0" Grid.Column="5" Style="{StaticResource GeneralSchedule.HeaderCell}">
+                <TextBlock Text="Thursday" FontWeight="SemiBold"/>
+            </Border>
+
+            
+            <ItemsControl Grid.Row="1"
+                          Grid.ColumnSpan="6"
+                          ItemsSource="{Binding Rows}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="160" SharedSizeGroup="Time"/>
+                                <ColumnDefinition Width="*"   SharedSizeGroup="Day"/>
+                                <ColumnDefinition Width="*"   SharedSizeGroup="Day"/>
+                                <ColumnDefinition Width="*"   SharedSizeGroup="Day"/>
+                                <ColumnDefinition Width="*"   SharedSizeGroup="Day"/>
+                                <ColumnDefinition Width="*"   SharedSizeGroup="Day"/>
+                            </Grid.ColumnDefinitions>
+
+                            
+                            <Border Grid.Column="0" Style="{StaticResource GeneralSchedule.CellBorder}">
+                                <TextBlock Text="{Binding Time}" FontWeight="SemiBold"/>
+                            </Border>
+
+                            
+                            <Border Grid.Column="1" Style="{StaticResource GeneralSchedule.CellBorder}">
+                                <ContentControl Content="{Binding Cells[0]}"
+                                                ContentTemplate="{StaticResource GeneralSchedule.Cell.Strings}"/>
+                            </Border>
+                            <Border Grid.Column="2" Style="{StaticResource GeneralSchedule.CellBorder}">
+                                <ContentControl Content="{Binding Cells[1]}"
+                                                ContentTemplate="{StaticResource GeneralSchedule.Cell.Strings}"/>
+                            </Border>
+                            <Border Grid.Column="3" Style="{StaticResource GeneralSchedule.CellBorder}">
+                                <ContentControl Content="{Binding Cells[2]}"
+                                                ContentTemplate="{StaticResource GeneralSchedule.Cell.Strings}"/>
+                            </Border>
+                            <Border Grid.Column="4" Style="{StaticResource GeneralSchedule.CellBorder}">
+                                <ContentControl Content="{Binding Cells[3]}"
+                                                ContentTemplate="{StaticResource GeneralSchedule.Cell.Strings}"/>
+                            </Border>
+                            <Border Grid.Column="5" Style="{StaticResource GeneralSchedule.CellBorder}">
+                                <ContentControl Content="{Binding Cells[4]}"
+                                                ContentTemplate="{StaticResource GeneralSchedule.Cell.Strings}"/>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+    </ScrollViewer>
+</UserControl>
