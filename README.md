@@ -1,11 +1,11 @@
-# TrainerScheduler
+# Faculty Scheduling System
 
 A Windows desktop application for building and managing academic timetables for departments, faculty members, rooms, courses, and students.
 
 ## Highlights
 - WPF desktop UI on .NET 8
 - Faculty, department, student, and master timetable views
-- Course/room/faculty scheduling constraints
+- Course, room, and faculty scheduling constraints
 - Manual assignments and scheduling overrides
 - Student plans and enrollment workflows
 - CSV and JSON import/export
@@ -21,6 +21,13 @@ A Windows desktop application for building and managing academic timetables for 
 - SQLite
 - ASP.NET Core shared framework for the optional LAN service
 
+## Naming compatibility note
+This project was originally developed for scheduling **vocational trainers**, so some legacy internal identifiers still use names such as `TrainerScheduler` and `MiniTrainerScheduler`.
+
+The public-facing terminology was later updated to **Faculty Member / Faculty Members** as the application evolved toward a broader academic scheduling use case. The legacy internal identifiers are intentionally preserved to avoid unnecessary changes to established namespaces, project references, and application wiring.
+
+This naming difference does **not** affect the application's scheduling logic, data model, or runtime functionality.
+
 ## Build
 Requirements:
 - Windows
@@ -33,10 +40,10 @@ Select Release / Any CPU
 Rebuild Solution
 ```
 
-The Release configuration treats compiler warnings as errors.
+The Release configuration treats compiler warnings as errors. The published source was successfully built in Release configuration on Windows before publication with 0 warnings and 0 errors.
 
 ## Data and privacy
-This public source package contains synthetic sample data only. It does not include a production database, real trainer/student records, local Visual Studio user files, backup source files, or organization-specific branding.
+This public source package contains synthetic sample data only. It does not include a production database, real faculty/student records, local Visual Studio user files, backup source files, or organization-specific branding.
 
 ## Language
 The user interface and public source comments/documentation are English-only. Legacy Arabic CSV/import compatibility is retained in code through Unicode escape sequences so Arabic characters do not appear directly in the public source tree.
